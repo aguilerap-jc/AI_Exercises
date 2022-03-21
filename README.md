@@ -17,3 +17,6 @@ This repository is to store general examples and activities of general AI and ML
 - Sentiment Analysis
 - Text Classifier
 3. Taxi OpenAI
+
+## Some other examples and resources
+[AI Examples and tranining - fast.ai](https://www.fast.ai/)
