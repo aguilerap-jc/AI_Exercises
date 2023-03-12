@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lane Detection App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      /* Center content horizontally and vertically */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      /* Set max width and height for image container */
+      #image-container {
+        max-width: 100%;
+        max-height: 90%;
+      }
+      /* Make image responsive */
+      #image-container img {
+        width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <form method="post" enctype="multipart/form-data">
+      <input type="file" name="image">
+      <input type="submit" value="Submit">
+    </form>
+    <div id="image-container">
+      {% if image_data %}
+        <img src="data:image/jpeg;base64,{{ image_data }}" />
+      {% endif %}
+    </div>
+  </body>
+</html>

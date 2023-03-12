@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lane Detection App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      /* Center content horizontally and vertically */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      /* Set max width and height for image container */
+      #image-container {
+        max-width: 100%;
+        max-height: 90%;
+      }
+      /* Make image responsive */
+      #image-container img {
+        width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <form>
+      <input type="file" id="image-file">
+      <button type="button" onclick="processImage()">Submit</button>
+    </form>
+    <div id="image-container"></div>
+    <script>
+      function processImage() {
+        // Get selected file from input field
+        const fileInput = document.getElementById('image-file');
+        const file = fileInput.files[0];
+        if (!file) {
+          return alert('Please select an image file.');
+        }
+        // Create FormData object to send image data in AJAX request
+        const formData = new FormData();
+        formData.append('image', file);
+        // Send AJAX request to Flask API
+        fetch('/api/process-image', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Set image source to Base64-encoded image data
+          const imageContainer = document.getElementById('image-container');
+          imageContainer.innerHTML = `<img src="data:image/jpeg;base64,${data.image_data}" />`;
+        })
+        .catch(error => {
+          console.error(error);
+          alert('An error occurred while processing the image.');
+        });
+      }
+    </script>
+  </body>
+</html>

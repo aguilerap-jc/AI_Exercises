@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Lane Detection App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha512-v8p3Wq3tM/RXYtpfPbGFjDx/bR0GvQ33/AzK1+eQ8DPzWcnrT+KsDZ9dohBQTf/uWewbsvFyRVYyrPWbUfpl6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+      /* Center content horizontally and vertically */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      /* Set max width and height for image container */
+      #image-container {
+        max-width: 100%;
+        max-height: 90%;
+      }
+      /* Make image responsive */
+      #image-container img {
+        width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mt-3 mb-5 text-center">Lane Detection App</h1>
+      <form>
+        <div class="mb-3">
+          <label for="image-file" class="form-label">Select an image file:</label>
+          <input type="file" id="image-file" class="form-control">
+        </div>
+        <div class="text-center">
+          <button type="button" onclick="processImage()" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+      <div id="image-container" class="mt-5"></div>
+    </div>
+    <!-- Include Bootstrap JS and dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js" integrity="sha512-X8U6yKj6zDRlGRcFFP/joZgFrHWKe1b7zfeBLd9rq+sTNyOQ92KyEJ/iHndvrG4sPJgRZ0o0qv+ybz4ppQ4XlA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.min.js" integrity="sha512-ejJFGORlWZPYfhmebLd+lnXJgXYf8Ap2EweizmB+mxzg5HPvZ/fWQJ5HxP5dPeP9o6y8W6zKziUPU0c6BgZ3qA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+      function processImage() {
+        // Get selected file from input field
+        const fileInput = document.getElementById('image-file');
+        const file = fileInput.files[0];
+        if (!file) {
+          return alert('Please select an image file.');
+        }
+        // Create FormData object to send image data in AJAX request
+        const formData = new FormData();
+        formData.append('image', file);
+        // Send AJAX request to Flask
+        fetch('/api/process_image', {
+            method: 'POST',
+            body: formData
+          })
+            .then(response => response.blob())
+            .then(imageBlob => {
+              // Create URL for image blob to display image
+              const imageUrl = URL.createObjectURL(imageBlob);
+              // Display image in container
+              const imageContainer = document.getElementById('image-container');
+              imageContainer.innerHTML = `<img src="${imageUrl}">`;
+            })
+            .catch(error => {
+              console.error(error);
+              alert('There was an error processing the image. Please try again.');
+            });
+        }
+      </script>
+    </body>
+  </html>
+  
